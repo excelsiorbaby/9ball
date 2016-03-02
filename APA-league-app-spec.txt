@@ -1,3 +1,10 @@
+Scope: Build a webkit application to track the scoring of 9-ball APA pool.  Application should be accessible on iPhone, iPad, Android and web.
+
+
+
+
+Technical Story:
+
 1. Press "LEAGUE NIGHT" button on home screen.
 2. New record in LEAGUE_NIGHTS 'LN'
 	Increment UID
@@ -62,33 +69,36 @@ Additionally, a player may call a [DEFENSIVE SHOT] to explain a shot that is not
 It is useful to track which balls have been pocketed, but not all players will wish to do so.  It must be possible to bypass ball-by-ball tracking.
 
 
+
+
+
 Let's try an example:
 
 PLAYER01 breaks the new rack.  It is a legal break.  The 3-ball is pocketed.
 
-1. The user is looking at the GAME INTERFACE.  PLAYER01's profile picture, name and team number are displayed at the top.
-2. The user selects [POCKETED].
+1. The scorekeeper is looking at the GAME INTERFACE.  PLAYER01's profile picture, name and team number are displayed at the top.
+2. The scorekeeper selects [POCKETED].
 	PLAYER01 receives 1 point.
-3. Optionally, the user is presented with all 9 balls in a grid on the screen.  The user can tap the 3-ball to mark it as pocketed.
-	If the user does not wish to track the balls, there is a button at the bottom that says "Don't track balls."  If selected, the BALL TRACKER will go away and only be accessible by tapping a flag in the lower right hand corner.
+3. Optionally, The scorekeeper is presented with all 9 balls in a grid on the screen.  The scorekeeper can tap the 3-ball to mark it as pocketed.
+	If The scorekeeper does not wish to track the balls, there is a button at the top that says "Don't track balls."  If selected, the BALL TRACKER will go away and only be accessible by tapping a flag at the bottom of the screen.
 4. PLAYER01's turn continues.  He attempts to pocket the 1-ball, but misses.
 5. PLAYER01's turn concludes.
-6. The user pokes "TURN COMPLETE".  The interface changes to PLAYER02's picture, name and team number.
+6. The scorekeeper pokes "TURN COMPLETE".  The interface changes to PLAYER02's picture, name and team number.
 
 1. PLAYERTWO pockets the 1-ball.
-2. The user selects [POCKETED].
+2. The scorekeeper selects [POCKETED].
 	PLAYER02 receives 1 point.
-	The BALL TRACKER is displayed.  The user taps the 1-ball.  The 3-ball and 1-ball are now greyed out.
+	The BALL TRACKER is displayed.  The scorekeeper taps the 1-ball.  The 3-ball and 1-ball are now greyed out.
 3. PLAYER02's turn continues.  He shoots the 2-ball and uses it to knock in the 7-ball.
-4. The user selects [POCKETED].
+4. The scorekeeper selects [POCKETED].
 	PLAYER02 receives 1 point.
-	The BALL TRACKER is displayed.  The user taps the 7-ball.  The 3-ball, 1-ball and 7-ball are now greyed out.
+	The BALL TRACKER is displayed.  The scorekeeper taps the 7-ball.  The 3-ball, 1-ball and 7-ball are now greyed out.
 5. PLAYER02's turn continues.  He shoots for the 2-ball, but hits the 8-ball instead.  The 8-ball is pocketed.
-6. The user taps [DEAD BALL].
+6. The scorekeeper taps [DEAD BALL].
 	DEAD_BALLS increments by 1.
-	The BALL TRACKER is displayed.  The user taps the 8-ball.  The 8-ball now shows a skull icon overlaid.  The 3-ball, 1-ball and 7-ball are greyed out.
+	The BALL TRACKER is displayed.  The scorekeeper taps the 8-ball.  The 8-ball now shows a skull icon overlaid.  The 3-ball, 1-ball and 7-ball are greyed out.
 7. PLAYER02's turn concludes.
-8. The user taps "TURN COMPLETE".  This concludes the first inning.  An animation is displayed and the interface switches back to PLAYER01.
+8. The scorekeeperr taps "TURN COMPLETE".  This concludes the first inning.  An animation is displayed and the interface switches back to PLAYER01.
 
 
 In this example, PLAYER01 pocketed a ball.  The scorekeeper opted to use the BALL TRACKER.  PLAYER02 pocketed two balls and one dead ball.  The score is PLAYER01: 1, PLAYER02: 2, DEAD BALLS: 1, and INNINGS: 1.
@@ -109,14 +119,15 @@ The score of each match is stored for each player.  The total number of PLAYER01
 
 
 TABLES:
-
-TEAMS
-PLAYERS
-9_BALL_GAMES
-8_BALL_GAMES
-PLAY_MODES
-GAME_TYPES
-LEAGUE_NIGHTS
+	TEAMS
+	PLAYERS
+	9_BALL_GAMES
+	9_BALL_TRACKER
+	8_BALL_GAMES
+	8_BALL_TRACKER
+	PLAY_MODES
+	GAME_TYPES
+	LEAGUE_NIGHTS
 
 
 
@@ -204,3 +215,28 @@ LEAGUE_NIGHTS
 PLAY_MODES
 	autoinc
 	MODE_NAME
+	
+	
+	
+	
+Graphics to create:
+	Lagging
+	Flipping a coin
+	Breaking
+	User default profile picture
+	All 15 billiard balls + cue ball
+	
+	
+	
+Screenshots to create:
+	Home Screen
+	About Screen
+	View Team
+	Create Team
+	View Player
+	Create Player
+	New Game Screen
+	Game Screen
+	Ball Tracker Screen
+	Statistics Screen
+	Completed Game Screen
