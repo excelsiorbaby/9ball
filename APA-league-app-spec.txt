@@ -128,6 +128,8 @@ TABLES:
 	PLAY_MODES
 	GAME_TYPES
 	LEAGUE_NIGHTS
+	9_BALL_SKILL_LEVELS
+	8_BALL_SKILL_LEVELS
 
 
 
@@ -196,6 +198,11 @@ PLAYERS
 	PLAYER02_POINTS
 	
 	
+9_BALL_SKILL_LEVELS
+
+8_BALL_SKILL_LEVELS
+	
+	
 GAME_TYPES
 	autoinc
 	TYPE_NAME	
@@ -225,7 +232,8 @@ Graphics to create:
 	Breaking
 	User default profile picture
 	All 15 billiard balls + cue ball
-	
+	Logo
+	Favicon
 	
 	
 Screenshots to create:
