@@ -1,0 +1,206 @@
+1. Press "LEAGUE NIGHT" button on home screen.
+2. New record in LEAGUE_NIGHTS 'LN'
+	Increment UID
+	Set DATETIME
+	Set DAY_OF_WEEK
+	Set USER_CREATED_ID
+3. User prompted to "Select First Team"
+	Set TEAM_01 = User's Selection
+4. User prompted to "Select Second Team"
+	Set TEAM_02 = User's Selection
+5. User prompted "Time to flip a coin." with a graphic of a flipping coin.
+6. User prompted "Who's going first?" and is presented with two buttons.  The buttons should be labelled with the name of the team, pulled in from GLOBAL_TEAMS table.
+	Set GOES_FIRST = User's Selection TEAM_ID
+7. User prompted "What game are you scoring?" with two buttons.  One button says "9-Ball" and the second says "8-Ball".
+	(This is the 9-ball spec.  Assume user selected 9-Ball.)
+	Increment 9_BALL '9B' UID
+	Set 9B.DATETIME
+	Set 9B.TEAM01 = LN.TEAM01
+	Set 9B.TEAM02 = LN.TEAM02
+8. User prompted "Who's playing for Team One?" Small, square icons are displayed for each player on Team One.  They should be big enough to poke discretely with a finger.  The player's "Profile Picture" should be displayed on the icon.
+	Set 9B.PLAYER01 = User's selection PLAYER_ID
+9. User prompted "Who's playing for Team Two?" Same sort of icons are displayed for each member of Team Two.
+	Set 9B.PLAYER02 = User's selection PLAYER_ID
+10. User prompted "Time to lag!" with a picture of two balls lagging.
+11. User prompted "Who won the lag?" After five seconds.  PLAYER01 and PLAYER02's profile pictures are displayed as tappable buttons.
+	Set WON_LAG = User's selection (1,2)
+12. User prompted "Time to break!" with a picture of a 9-ball game ready to start.
+13. The player who won the lag breaks the balls on the table.
+14. Scorekeeper is presented with the GAME INTERFACE.
+
+*** GAME INTERFACE ***
+
+During a turn, there are several outcomes.  These outcomes are slightly different on the First Turn (Break).
+
+OUTCOMES:
+
+A. If a "legal" ball is pocketed, the player continues his turn.  The pocketed ball is tracked as 1 point.
+B. If an "illegal" ball is pocketed, the player's turn concludes.  The "illegal" ball is tracked as a dead ball.
+C. If the cue ball goes in the pocket, the player has "scratched" and the turn is concluded.  The scratch is not tracked.
+D. If the cue ball and a game ball goes in the pocket, the player has "scratched" and the game ball is now "dead." The "dead" ball is tracked.
+E. If the player fails to hit a "legal" ball in the correct order, and no ball is pocketed, the turn is over and the other player gets "ball-in-hand." This is not tracked.
+F. If the player hits a "legal" ball in the correct order, and no ball is pocketed, the turn is over.
+G. If the player hits the "legal" ball, and this causes the 9-ball to be pocketed, he scores 2 points for the 9-ball and 1 point for any additional game balls.  Any balls left on the table after the 9-ball is legally pocketed are marked as dead balls.
+
+After each of Player Two's turns, an inning is marked as progress through the game.
+
+What do we call these Data Points?
+
+A. [POCKETED]
+B. [DEAD BALL]
+C. N/A
+D. [DEAD BALL]
+E. N/A
+F. N/A
+G. [9-BALL] + [POCKETED] + [DEAD BALL]
+
+
+There are 3 main actions that are tracked: [POCKETED]. [DEAD BALL] and [9-BALL].
+
+Additionally, a player may call a [DEFENSIVE SHOT] to explain a shot that is not predicted to pocket a ball.
+
+It is useful to track which balls have been pocketed, but not all players will wish to do so.  It must be possible to bypass ball-by-ball tracking.
+
+
+Let's try an example:
+
+PLAYER01 breaks the new rack.  It is a legal break.  The 3-ball is pocketed.
+
+1. The user is looking at the GAME INTERFACE.  PLAYER01's profile picture, name and team number are displayed at the top.
+2. The user selects [POCKETED].
+	PLAYER01 receives 1 point.
+3. Optionally, the user is presented with all 9 balls in a grid on the screen.  The user can tap the 3-ball to mark it as pocketed.
+	If the user does not wish to track the balls, there is a button at the bottom that says "Don't track balls."  If selected, the BALL TRACKER will go away and only be accessible by tapping a flag in the lower right hand corner.
+4. PLAYER01's turn continues.  He attempts to pocket the 1-ball, but misses.
+5. PLAYER01's turn concludes.
+6. The user pokes "TURN COMPLETE".  The interface changes to PLAYER02's picture, name and team number.
+
+1. PLAYERTWO pockets the 1-ball.
+2. The user selects [POCKETED].
+	PLAYER02 receives 1 point.
+	The BALL TRACKER is displayed.  The user taps the 1-ball.  The 3-ball and 1-ball are now greyed out.
+3. PLAYER02's turn continues.  He shoots the 2-ball and uses it to knock in the 7-ball.
+4. The user selects [POCKETED].
+	PLAYER02 receives 1 point.
+	The BALL TRACKER is displayed.  The user taps the 7-ball.  The 3-ball, 1-ball and 7-ball are now greyed out.
+5. PLAYER02's turn continues.  He shoots for the 2-ball, but hits the 8-ball instead.  The 8-ball is pocketed.
+6. The user taps [DEAD BALL].
+	DEAD_BALLS increments by 1.
+	The BALL TRACKER is displayed.  The user taps the 8-ball.  The 8-ball now shows a skull icon overlaid.  The 3-ball, 1-ball and 7-ball are greyed out.
+7. PLAYER02's turn concludes.
+8. The user taps "TURN COMPLETE".  This concludes the first inning.  An animation is displayed and the interface switches back to PLAYER01.
+
+
+In this example, PLAYER01 pocketed a ball.  The scorekeeper opted to use the BALL TRACKER.  PLAYER02 pocketed two balls and one dead ball.  The score is PLAYER01: 1, PLAYER02: 2, DEAD BALLS: 1, and INNINGS: 1.
+
+
+The game continues until one of the players has scored his specified number of points.
+
+The player's SKILL LEVEL correlates to the number of points he must score to win the game.
+
+The player's team receives GAME POINTS based on the number of points scored by the loser of the game and his skill level.
+
+
+The score of each match is stored for each player.  The total number of PLAYER01 points + PLAYER02 points + DEAD BALLS for each round must equal 10.
+
+
+
+
+
+
+TABLES:
+
+TEAMS
+PLAYERS
+9_BALL_GAMES
+8_BALL_GAMES
+PLAY_MODES
+GAME_TYPES
+LEAGUE_NIGHTS
+
+
+
+
+TEAMS
+	autoinc
+	APA_TEAM_NUMBER
+	TEAM_NAME
+	TEAM_COLOR {...}
+	TEAM_CAPTAIN_ID <Key to PLAYERS>
+	TEAM_COCAPTAIN_ID <Key to PLAYERS>
+	APA_DAY_OF_WEEK {Sun, Mon, Tue, Wed, Thu, Fri, Sat}
+	
+	
+PLAYERS
+	autoinc
+	APA_PLAYER_NUMBER
+	PLAYER_NAME
+	PLAYER_NICK
+	PLAYER_COLOR
+	PLAYER_PHOTO_ID
+	8_BALL_SKILL_LEVEL
+	9_BALL_SKILL_LEVEL
+	PHONE_NUMBER
+	EMAIL
+	GAMES_WON
+	GAMES_LOST
+	APA_GAMES_WON
+	APA_GAMES_LOST
+	
+	
+9_BALL_GAMES
+	autoinc
+	STARTTIME
+	ENDTIME
+	TEAM01
+	TEAM02
+	PLAYER01
+	PLAYER02
+	LAG_WINNER {1, 2}
+	PLAYER01_SKILL_LEVEL
+	PLAYER02_SKILL_LEVEL
+	INNINGS
+	PLAYER01_DEFENSE_SHOTS
+	PLAYER02_DEFENSE_SHOTS
+	
+
+9_BALL_TRACKER
+	autoinc
+	DATETIME
+	MATCH_ORDER
+	USE_TRACKER {Yes, No}
+	POCKETED_COUNT
+	DEAD_COUNT
+	1_BALL_STATUS {Open, Dead, Pocket}
+	2_BALL_STATUS {Open, Dead, Pocket}	
+	3_BALL_STATUS {Open, Dead, Pocket}
+	4_BALL_STATUS {Open, Dead, Pocket}
+	5_BALL_STATUS {Open, Dead, Pocket}
+	6_BALL_STATUS {Open, Dead, Pocket}
+	7_BALL_STATUS {Open, Dead, Pocket}
+	8_BALL_STATUS {Open, Dead, Pocket}
+	9_BALL_STATUS {Open, Dead, Pocket}
+	MATCH_INNINGS
+	PLAYER01_POINTS
+	PLAYER02_POINTS
+	
+	
+GAME_TYPES
+	autoinc
+	TYPE_NAME	
+	
+	
+LEAGUE_NIGHTS
+	autoinc
+	START_TIME
+	END_TIME
+	TEAM01
+	TEAM02
+	GOES_FIRST
+	9_BALL_GAME_COUNT
+	8-BALL_GAME_COUNT
+	
+	
+PLAY_MODES
+	autoinc
+	MODE_NAME
